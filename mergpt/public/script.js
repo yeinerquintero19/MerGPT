@@ -160,7 +160,10 @@ revealEls.forEach((el) => io.observe(el));
     showMerging();
 
     try {
-      const res = await fetch('/api/chat', {
+      const apiUrl = (location.protocol === 'file:')
+        ? 'http://localhost:3000/api/chat'
+        : '/api/chat';
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: history }),
