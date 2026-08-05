@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MergPT — Muchas ideas, una sola respuesta</title>
+<meta name="description" content="MergPT es la IA que fusiona múltiples fuentes de razonamiento en una sola respuesta clara.">
+<meta name="google-site-verification" content="googled99009649db5e77a">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#top" class="logo">
+      <span class="logo-mark">
+        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="13" cy="13" r="3" fill="#35D4FF"/>
+          <circle cx="4" cy="5" r="2" fill="#2f6fed"/>
+          <circle cx="22" cy="5" r="2" fill="#2f6fed"/>
+          <circle cx="4" cy="21" r="2" fill="#2f6fed"/>
+          <circle cx="22" cy="21" r="2" fill="#2f6fed"/>
+          <path d="M4 5L13 13M22 5L13 13M4 21L13 13M22 21L13 13" stroke="#3a5680" stroke-width="1"/>
+        </svg>
+      </span>
+      MergPT
+    </a>
+    <ul class="nav-links">
+      <li><a href="#producto">Producto</a></li>
+      <li><a href="#como-funciona">Cómo funciona</a></li>
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#casos">Casos de uso</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#demo" class="btn btn-ghost">Ver demo</a>
+      <a href="#cta" class="btn btn-primary">Probar gratis</a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="wrap">
+
+    <!-- HERO -->
+    <section class="hero" style="padding-top: 96px;">
+      <div class="hero-text">
+        <span class="eyebrow"><span class="dot"></span> NUEVO · Motor de convergencia v2</span>
+        <h1>Muchas líneas de razonamiento. <span class="accent">Una sola respuesta clara.</span></h1>
+        <p class="lead">MergPT explora varias rutas de pensamiento en paralelo y las fusiona en una única respuesta coherente, sin que tengas que elegir cuál creer.</p>
+        <div class="hero-actions">
+          <a href="#cta" class="btn btn-primary">Empezar a fusionar ideas</a>
+          <a href="#como-funciona" class="btn btn-ghost">Cómo funciona ↓</a>
+        </div>
+        <div class="trust-row">
+          <div><strong>4.8×</strong>menos contradicciones que un modelo único</div>
+          <div><strong>&lt;2s</strong>tiempo medio de convergencia</div>
+          <div><strong>12</strong>rutas de razonamiento en paralelo</div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <canvas id="mergeCanvas"></canvas>
+        <div class="core-label"><span>convergiendo</span></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="sources">
+    <div class="wrap">
+      <p>MergPT razona cruzando estas fuentes antes de responder</p>
+      <div class="sources-track">
+        <span>Contexto de la conversación</span>
+        <span>Documentos adjuntos</span>
+        <span>Conocimiento verificado</span>
+        <span>Búsqueda en vivo</span>
+        <span>Memoria de proyecto</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- FEATURES -->
+    <section id="producto">
+      <div class="section-head reveal">
+        <span class="eyebrow">PRODUCTO</span>
+        <h2>Diseñado para pensar en varias direcciones a la vez</h2>
+        <p>En lugar de seguir un único hilo de razonamiento, MergPT abre varias ramas, las contrasta entre sí y descarta lo que no encaja antes de escribirte una sola respuesta.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l6 6M20 4l-6 6M4 20l6-6M20 20l-6-6"/><circle cx="12" cy="12" r="2.5"/></svg>
+          </div>
+          <h3>Convergencia de fuentes</h3>
+          <p>Cruza contexto, documentos y conocimiento verificado en una sola pasada antes de contestar.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v6M12 15v6M3 12h6M15 12h6"/></svg>
+          </div>
+          <h3>Detección de contradicciones</h3>
+          <p>Si dos rutas de razonamiento no coinciden, MergPT te avisa en vez de inventar una respuesta a medias.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M8 8h5M8 16h5"/></svg>
+          </div>
+          <h3>Memoria de proyecto</h3>
+          <p>Recuerda las decisiones tomadas en la conversación para no volver a fusionar lo mismo dos veces.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg>
+          </div>
+          <h3>Respuestas con procedencia</h3>
+          <p>Cada respuesta indica de qué ruta de razonamiento salió cada parte, para que puedas verificarla.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
+          </div>
+          <h3>Modo desarrollador</h3>
+          <p>Expón las rutas por separado en formato técnico cuando necesites depurar el razonamiento.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+          </div>
+          <h3>Convergencia en &lt;2s</h3>
+          <p>El proceso de fusión corre en paralelo, así que no esperas más por pensar en varias direcciones.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section id="como-funciona">
+      <div class="section-head reveal">
+        <span class="eyebrow">PROCESO</span>
+        <h2>De la pregunta a la respuesta fusionada</h2>
+        <p>Cuatro pasos que ocurren en segundos, cada vez que escribes.</p>
+      </div>
+
+      <div class="flow">
+        <div class="flow-step reveal">
+          <div class="flow-num">01</div>
+          <h3>Preguntas</h3>
+          <p>Escribes tu pregunta en lenguaje natural, con o sin archivos adjuntos.</p>
+        </div>
+        <div class="flow-step reveal">
+          <div class="flow-num">02</div>
+          <h3>Explora rutas</h3>
+          <p>MergPT abre varias líneas de razonamiento independientes en paralelo.</p>
+        </div>
+        <div class="flow-step reveal">
+          <div class="flow-num">03</div>
+          <h3>Fusiona</h3>
+          <p>Compara las rutas, resuelve contradicciones y conserva lo que se sostiene.</p>
+        </div>
+        <div class="flow-step reveal">
+          <div class="flow-num">04</div>
+          <h3>Responde</h3>
+          <p>Te entrega una sola respuesta, con procedencia si la necesitas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO -->
+    <section id="demo">
+      <div class="demo-panel">
+        <div class="demo-copy reveal">
+          <span class="eyebrow">DEMO</span>
+          <h2>Habla con MergPT</h2>
+          <p>Este chat está conectado a un servidor local que llama a la API de DeepSeek. Escribe algo y espera la respuesta real del modelo.</p>
+          <ul class="demo-list">
+            <li>Las respuestas salen del modelo <code>deepseek-chat</code>, no están precargadas.</li>
+            <li>Si el servidor no tiene API key configurada, verás un aviso aquí mismo.</li>
+            <li>Funciona igual de bien en móvil que en escritorio.</li>
+          </ul>
+        </div>
+
+        <div class="chat-window reveal">
+          <div class="chat-head">
+            <div class="chat-dots"><span></span><span></span><span></span></div>
+            <span class="title">mergpt tu mejor aliado</span>
+          </div>
+          <div class="chat-body" id="chatBody">
+            <div class="msg ai">
+              <span class="tag">MERGPT</span>
+              Hola, soy MergPT. Pregúntame algo y te dare la mejor respuesta posible.
+            </div>
+          </div>
+          <div class="chat-suggestions">
+            <button class="chip" data-msg="¿Qué es MergPT?" type="button">¿Qué es MergPT?</button>
+            <button class="chip" data-msg="¿Cómo evitas las contradicciones?" type="button">¿Cómo evitas contradicciones?</button>
+            <button class="chip" data-msg="Dame un caso de uso real" type="button">Dame un caso de uso</button>
+          </div>
+          <form class="chat-input" id="chatForm">
+            <input type="text" id="chatInput" placeholder="Escribe tu mensaje…" autocomplete="off">
+            <button type="submit" id="chatSubmit">Enviar</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- CASOS DE USO -->
+    <section id="casos">
+      <div class="section-head reveal">
+        <span class="eyebrow">CASOS DE USO</span>
+        <h2>Equipos que necesitan una sola verdad, rápido</h2>
+        <p>Cuando una decisión depende de cruzar varias fuentes a la vez.</p>
+      </div>
+
+      <div class="cases">
+        <div class="case-card reveal">
+          <span class="case-num">CASO 01</span>
+          <div>
+            <h3>Investigación técnica</h3>
+            <p>Cruza documentación, papers y tu propio código antes de proponer una solución.</p>
+          </div>
+        </div>
+        <div class="case-card reveal">
+          <span class="case-num">CASO 02</span>
+          <div>
+            <h3>Soporte al cliente</h3>
+            <p>Fusiona el historial del ticket con la base de conocimiento para una sola respuesta consistente.</p>
+          </div>
+        </div>
+        <div class="case-card reveal">
+          <span class="case-num">CASO 03</span>
+          <div>
+            <h3>Análisis legal</h3>
+            <p>Compara cláusulas de distintos documentos y señala dónde entran en conflicto.</p>
+          </div>
+        </div>
+        <div class="case-card reveal">
+          <span class="case-num">CASO 04</span>
+          <div>
+            <h3>Planeación de producto</h3>
+            <p>Junta feedback de usuarios, métricas y notas del equipo en una recomendación clara.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta">
+      <div class="cta-band reveal">
+        <h2>Deja de elegir entre respuestas contradictorias</h2>
+        <p>Empieza a usar MergPT y recibe una sola respuesta en la que puedas confiar, con la procedencia de cada parte.</p>
+        <a href="#demo" class="btn btn-primary">Probar el chat</a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="logo">
+          <span class="logo-mark">
+            <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="13" cy="13" r="3" fill="#35D4FF"/>
+              <circle cx="4" cy="5" r="2" fill="#2f6fed"/>
+              <circle cx="22" cy="5" r="2" fill="#2f6fed"/>
+              <circle cx="4" cy="21" r="2" fill="#2f6fed"/>
+              <circle cx="22" cy="21" r="2" fill="#2f6fed"/>
+              <path d="M4 5L13 13M22 5L13 13M4 21L13 13M22 21L13 13" stroke="#3a5680" stroke-width="1"/>
+            </svg>
+          </span>
+          MergPT
+        </a>
+        <p>La IA que fusiona varias rutas de razonamiento en una sola respuesta clara y verificable.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Producto</h4>
+          <ul>
+            <li><a href="#producto">Características</a></li>
+            <li><a href="#como-funciona">Cómo funciona</a></li>
+            <li><a href="#demo">Demo</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="#">Sobre nosotros</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li><a href="#">Empleo</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Privacidad</a></li>
+            <li><a href="#">Términos</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MergPT.</span>
+      <span>Frontend + servidor Node conectado a DeepSeek</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
