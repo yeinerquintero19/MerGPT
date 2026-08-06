@@ -169,7 +169,12 @@ revealEls.forEach((el) => io.observe(el));
         body: JSON.stringify({ messages: history }),
       });
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        throw new Error('El servidor respondió algo que no es JSON (HTTP ' + res.status + ')');
+      }
       hideMerging();
 
       if (!res.ok) {
@@ -181,7 +186,7 @@ revealEls.forEach((el) => io.observe(el));
       history.push({ role: 'assistant', content: data.reply });
     } catch (err) {
       hideMerging();
-      addMessage('No pude conectar con el servidor local. ¿Está corriendo "npm start"?', 'ai', true);
+      addMessage('Error al conectar con el servidor: ' + (err.message || 'desconocido'), 'ai', true);
     } finally {
       input.disabled = false;
       submitBtn.disabled = false;

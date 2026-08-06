@@ -10,8 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Servir los archivos estáticos de la interfaz web (frontend/index.html, styles.css, script.js)
+// Servir los archivos estáticos de la interfaz web (frontend/index.html, styles.css, script.js).
+// Se intenta con __dirname (local) y con process.cwd() (Vercel), para que funcione en ambos.
 app.use(express.static(path.join(__dirname, "..", "frontend")));
+app.use(express.static(path.join(process.cwd(), "frontend")));
 
 // Proveedor de IA seleccionado: 'groq' (gratis online), 'ollama' (gratis local en PC) o 'deepseek'
 const provider = (process.env.AI_PROVIDER || "groq").toLowerCase();
