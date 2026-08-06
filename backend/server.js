@@ -83,24 +83,15 @@ async function handleChat(req, res) {
         let replyContent = "";
 
         if (provider === "groq") {
-            const groqApiKey = process.env.GROQ_API_KEY || clientConfig.apiKey;
-            const apiRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${groqApiKey}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    model: defaultModel,
-                    messages: allMessages
-                })
+            const groqClient = new OpenAI({
+                apiKey: groqApiKey,
+                baseURL: "https://api.groq.com/openai/v1"
             });
-
-            const data = await apiRes.json();
-            if (!apiRes.ok) {
-                throw new Error(data.error?.message || `Error HTTP ${apiRes.status} de Groq`);
-            }
-            replyContent = data.choices[0]?.message?.content || "Sin respuesta del modelo.";
+            const respuesta = await groqClient.chat.completions.create({
+                model: defaultModel,
+                messages: allMessages
+            });
+            replyContent = respuesta.choices[0]?.message?.content || "Sin respuesta del modelo.";
         } else {
             const respuesta = await client.chat.completions.create({
                 model: defaultModel,
@@ -118,7 +109,7 @@ async function handleChat(req, res) {
         
         let errorMessage = error.message || "Hubo un error al conectar con la IA.";
         if (errorMessage.includes("402") || errorMessage.includes("Insufficient Balance")) {
-            errorMessage = "Error 402: Tu cuenta de DeepSeek no tiene saldo. Puedes cambiar a Groq u Ollama en tu .env para usar IA gratis.";
+            errorMessage = "Error 402: Tu cuenta no tiene saldo. Verifica tus credenciales en .env o Vercel.";
         } else if (errorMessage.includes("ECONNREFUSED") && provider === "ollama") {
             errorMessage = "No se pudo conectar a Ollama. Asegúrate de tener la aplicación Ollama instalada y abierta en tu PC.";
         } else if (error.status === 401 || errorMessage.includes("401")) {
@@ -132,8 +123,8 @@ async function handleChat(req, res) {
     }
 }
 
-app.post("/api/chat", handleChat);
-app.post("/chat", handleChat);
+app.all("/api/chat", handleChat);
+app.all("/chat", handleChat);
 
 // En Vercel se exporta la app (función serverless); en local se inicia el servidor.
 if (require.main === module) {
