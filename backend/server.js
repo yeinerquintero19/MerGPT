@@ -46,8 +46,8 @@ const client = new OpenAI(clientConfig);
 // Handler principal para la API de chat
 async function handleChat(req, res) {
     try {
-        const activeGroqKey = process.env.GROQ_API_KEY || clientConfig.apiKey;
-        if (provider === "groq" && (!activeGroqKey || activeGroqKey === "dummy_key")) {
+        const groqApiKey = process.env.GROQ_API_KEY || clientConfig.apiKey;
+        if (provider === "groq" && (!groqApiKey || groqApiKey === "dummy_key")) {
             return res.status(400).json({
                 error: "Falta configurar la variable GROQ_API_KEY en Vercel (Environment Variables).",
                 reply: "Falta configurar la variable GROQ_API_KEY en Vercel."
