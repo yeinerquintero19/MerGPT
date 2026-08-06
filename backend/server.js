@@ -10,8 +10,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Servir los archivos estáticos de la interfaz web (public/index.html, styles.css, script.js)
-app.use(express.static(path.join(__dirname, "public")));
+// Servir los archivos estáticos de la interfaz web (frontend/index.html, styles.css, script.js)
+app.use(express.static(path.join(__dirname, "..", "frontend")));
 
 // Proveedor de IA seleccionado: 'groq' (gratis online), 'ollama' (gratis local en PC) o 'deepseek'
 const provider = (process.env.AI_PROVIDER || "groq").toLowerCase();
@@ -133,8 +133,13 @@ async function handleChat(req, res) {
 app.post("/api/chat", handleChat);
 app.post("/chat", handleChat);
 
-const PORT = process.env.PORT || 3000;
+// En Vercel se exporta la app (función serverless); en local se inicia el servidor.
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log(`Servidor MergPT escuchando en http://localhost:${PORT} (Proveedor: ${provider.toUpperCase()}, Modelo: ${defaultModel})`);
-});
+    app.listen(PORT, () => {
+        console.log(`Servidor MergPT escuchando en http://localhost:${PORT} (Proveedor: ${provider.toUpperCase()}, Modelo: ${defaultModel})`);
+    });
+}
+
+module.exports = app;

@@ -2,14 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "mergpt/server.js",
+      "src": "backend/server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "mergpt/server.js"
+      "dest": "backend/server.js"
     }
   ]
 }

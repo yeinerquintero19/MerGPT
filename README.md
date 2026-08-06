@@ -1,6 +1,24 @@
 # MERGPT
 
-Asistente de IA con chat en tiempo real (HTML, CSS y JavaScript + backend Node.js/Express).
+Asistente de IA con chat en tiempo real (frontend HTML, CSS y JavaScript + backend Node.js/Express).
+
+## Estructura del proyecto
+
+```
+mergpt/
+├── frontend/            # Interfaz web (HTML, CSS, JS)
+│   ├── index.html
+│   ├── styles.css
+│   ├── script.js
+│   └── googled99009649db5e77a.html
+├── backend/             # API y servidor
+│   ├── server.js
+│   ├── .env
+│   └── .env.example
+├── package.json
+├── vercel.json
+└── README.md
+```
 
 ## Requisitos
 
@@ -21,8 +39,8 @@ Asistente de IA con chat en tiempo real (HTML, CSS y JavaScript + backend Node.j
    ```
 
 3. Crea tu archivo de configuración:
-   - Copia `mergpt/.env.example` a `mergpt/.env`
-   - Abre `mergpt/.env` y pega tu clave de Groq en `GROQ_API_KEY`
+   - Copia `backend/.env.example` a `backend/.env`
+   - Abre `backend/.env` y pega tu clave de Groq en `GROQ_API_KEY`
 
 4. Inicia el servidor:
    ```
@@ -33,4 +51,4 @@ Asistente de IA con chat en tiempo real (HTML, CSS y JavaScript + backend Node.j
 
 ## Nota
 
-La interfaz también se puede abrir como archivo HTML directo (`mergpt/public/index.html`), pero el servidor debe estar corriendo para que el chat funcione.
+La interfaz también se puede abrir como archivo HTML directo (`frontend/index.html`), pero el servidor debe estar corriendo para que el chat funcione.
