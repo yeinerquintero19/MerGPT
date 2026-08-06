@@ -29,7 +29,7 @@ if (provider === "ollama") {
     defaultModel = process.env.OLLAMA_MODEL || "llama3.2";
 } else if (provider === "groq") {
     clientConfig = {
-        apiKey: process.env.GROQ_API_KEY || "",
+        apiKey: process.env.GROQ_API_KEY || "dummy_key",
         baseURL: "https://api.groq.com/openai/v1"
     };
     defaultModel = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
@@ -46,11 +46,11 @@ const client = new OpenAI(clientConfig);
 // Handler principal para la API de chat
 async function handleChat(req, res) {
     try {
-        const activeKey = clientConfig.apiKey;
-        if (provider === "groq" && (!activeKey || activeKey === "dummy_key")) {
+        const activeGroqKey = process.env.GROQ_API_KEY || clientConfig.apiKey;
+        if (provider === "groq" && (!activeGroqKey || activeGroqKey === "dummy_key")) {
             return res.status(400).json({
-                error: "Falta configurar GROQ_API_KEY",
-                reply: "Falta configurar GROQ_API_KEY"
+                error: "Falta configurar la variable GROQ_API_KEY en Vercel (Environment Variables).",
+                reply: "Falta configurar la variable GROQ_API_KEY en Vercel."
             });
         }
 
@@ -83,7 +83,7 @@ async function handleChat(req, res) {
         let replyContent = "";
 
         if (provider === "groq") {
-            const groqApiKey = clientConfig.apiKey;
+            const groqApiKey = process.env.GROQ_API_KEY || clientConfig.apiKey;
             const apiRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
                 headers: {
