@@ -53,54 +53,68 @@ if (provider === "ollama") {
 
 const client = new OpenAI(clientConfig);
 
-// Función de búsqueda de noticias y web en tiempo real (Google News RSS & DuckDuckGo)
+// Función de búsqueda ultra-rápida en paralelo (Google News RSS & DuckDuckGo)
 async function searchWebAndNews(query) {
-    if (!query || query.length < 2) return "";
-    let results = [];
-
-    // 1. Google News RSS (América Latina y España)
-    try {
-        const newsUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=es-419&gl=CO&ceid=CO:es-419`;
-        const newsRes = await fetch(newsUrl, { 
-            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-            signal: AbortSignal.timeout(4000)
-        });
-        if (newsRes.ok) {
-            const xml = await newsRes.text();
-            const items = [...xml.matchAll(/<title>(.*?)<\/title>/g)]
-                .map(m => m[1].replace(/<!\[CDATA\[/g, '').replace(/\]\]>/g, '').trim())
-                .filter(t => t && !t.toLowerCase().includes('google news') && !t.toLowerCase().includes('google noticias'))
-                .slice(0, 6);
-            if (items.length > 0) {
-                results.push("TITULARES Y NOTICIAS EN TIEMPO REAL (DE HOY):\n- " + items.join("\n- "));
-            }
-        }
-    } catch (e) {
-        // Fallback silencioso
+    if (!query || query.length < 3) return "";
+    
+    // Omitir búsqueda web para saludos o frases cortas triviales
+    const cleanQ = query.toLowerCase().trim();
+    const trivialWords = ["hola", "buenas", "buenos dias", "buenas tardes", "buenas noches", "quien eres", "como te llamas", "que eres", "gracias", "chao", "adios"];
+    if (trivialWords.some(w => cleanQ === w || cleanQ === w + "?" || cleanQ === w + "!")) {
+        return "";
     }
 
-    // 2. DuckDuckGo HTML Search
-    try {
-        const ddgUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query + " noticias hoy")}`;
-        const ddgRes = await fetch(ddgUrl, {
-            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-            signal: AbortSignal.timeout(4000)
-        });
-        if (ddgRes.ok) {
-            const html = await ddgRes.text();
-            const snippets = [...html.matchAll(/<a class="result__snippet[^"]*"[^>]*>(.*?)<\/a>/gs)]
-                .map(m => m[1].replace(/<[^>]+>/g, '').trim())
-                .filter(s => s.length > 15)
-                .slice(0, 4);
-            if (snippets.length > 0) {
-                results.push("INFORMACIÓN ADICIONAL DE LA WEB:\n- " + snippets.join("\n- "));
+    const fetchNews = async () => {
+        try {
+            const newsUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=es-419&gl=CO&ceid=CO:es-419`;
+            const newsRes = await fetch(newsUrl, { 
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+                signal: AbortSignal.timeout(1500)
+            });
+            if (newsRes.ok) {
+                const xml = await newsRes.text();
+                const items = [...xml.matchAll(/<title>(.*?)<\/title>/g)]
+                    .map(m => m[1].replace(/<!\[CDATA\[/g, '').replace(/\]\]>/g, '').trim())
+                    .filter(t => t && !t.toLowerCase().includes('google news') && !t.toLowerCase().includes('google noticias'))
+                    .slice(0, 5);
+                if (items.length > 0) {
+                    return "TITULARES Y NOTICIAS EN TIEMPO REAL (DE HOY):\n- " + items.join("\n- ");
+                }
             }
-        }
-    } catch (e) {
-        // Fallback silencioso
-    }
+        } catch (e) {}
+        return "";
+    };
 
-    return results.join("\n\n");
+    const fetchDDG = async () => {
+        try {
+            const ddgUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+            const ddgRes = await fetch(ddgUrl, {
+                headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+                signal: AbortSignal.timeout(1500)
+            });
+            if (ddgRes.ok) {
+                const html = await ddgRes.text();
+                const snippets = [...html.matchAll(/<a class="result__snippet[^"]*"[^>]*>(.*?)<\/a>/gs)]
+                    .map(m => m[1].replace(/<[^>]+>/g, '').trim())
+                    .filter(s => s.length > 15)
+                    .slice(0, 3);
+                if (snippets.length > 0) {
+                    return "INFORMACIÓN ADICIONAL DE LA WEB:\n- " + snippets.join("\n- ");
+                }
+            }
+        } catch (e) {}
+        return "";
+    };
+
+    // Ejecutar ambas búsquedas EN PARALELO simultáneamente
+    const [newsResult, ddgResult] = await Promise.allSettled([fetchNews(), fetchDDG()]);
+    
+    const parts = [
+        newsResult.status === 'fulfilled' ? newsResult.value : '',
+        ddgResult.status === 'fulfilled' ? ddgResult.value : ''
+    ].filter(Boolean);
+
+    return parts.join("\n\n");
 }
 
 // Handler principal para la API de chat
