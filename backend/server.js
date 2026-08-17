@@ -42,7 +42,7 @@ if (provider === "ollama") {
             "X-Title": "MerGPT"
         }
     };
-    defaultModel = process.env.OPENROUTER_MODEL || "meta-llama/llama-3.1-8b-instruct:free";
+    defaultModel = process.env.OPENROUTER_MODEL || "deepseek/deepseek-r1:free";
 } else {
     clientConfig = {
         apiKey: process.env.DEEPSEEK_API_KEY || "dummy_key",
