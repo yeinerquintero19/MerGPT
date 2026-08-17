@@ -53,6 +53,56 @@ if (provider === "ollama") {
 
 const client = new OpenAI(clientConfig);
 
+// Función de búsqueda de noticias y web en tiempo real (Google News RSS & DuckDuckGo)
+async function searchWebAndNews(query) {
+    if (!query || query.length < 3) return "";
+    let results = [];
+
+    // 1. Google News RSS
+    try {
+        const newsUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=es&gl=ES&ceid=ES:es`;
+        const newsRes = await fetch(newsUrl, { 
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+            signal: AbortSignal.timeout(3500)
+        });
+        if (newsRes.ok) {
+            const xml = await newsRes.text();
+            const items = [...xml.matchAll(/<title>(.*?)<\/title>/g)]
+                .map(m => m[1].replace(/<!\[CDATA\[/g, '').replace(/\]\]>/g, '').trim())
+                .filter(t => t && !t.toLowerCase().includes('google news'))
+                .slice(0, 5);
+            if (items.length > 0) {
+                results.push("NOTICIAS Y TITULARES RECIENTES:\n- " + items.join("\n- "));
+            }
+        }
+    } catch (e) {
+        // Fallback silencioso
+    }
+
+    // 2. DuckDuckGo HTML Search
+    try {
+        const ddgUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+        const ddgRes = await fetch(ddgUrl, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+            signal: AbortSignal.timeout(3500)
+        });
+        if (ddgRes.ok) {
+            const html = await ddgRes.text();
+            const snippets = [...html.matchAll(/<a class="result__snippet[^"]*"[^>]*>(.*?)<\/a>/gs)]
+                .map(m => m[1].replace(/<[^>]+>/g, '').trim())
+                .filter(s => s.length > 15)
+                .slice(0, 4);
+            if (snippets.length > 0) {
+                results.push("RESULTADOS WEB RECIENTES:\n- " + snippets.join("\n- "));
+            }
+        }
+    } catch (e) {
+        // Fallback silencioso
+    }
+
+    return results.join("\n\n");
+}
+
 // Handler principal para la API de chat
 async function handleChat(req, res) {
     try {
@@ -91,9 +141,19 @@ async function handleChat(req, res) {
             });
         }
 
+        const lastUserMsg = messages[messages.length - 1]?.content || "";
+        const webInfo = await searchWebAndNews(lastUserMsg);
+
+        const todayStr = new Date().toLocaleDateString("es-ES", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        let systemContent = `Eres MergPT, un asistente de IA inteligente, amable y conciso. Respondes de forma clara y directa en español.\nFecha actual: ${todayStr}.`;
+
+        if (webInfo && webInfo.trim()) {
+            systemContent += `\n\nInformación obtenida en TIEMPO REAL de la web y noticias recientes para responder a esta consulta:\n${webInfo}\n\nUtiliza esta información en tiempo real para dar una respuesta precisa, actualizada y basada en los hechos más recientes si aplica.`;
+        }
+
         const systemMessage = {
             role: "system",
-            content: "Eres MergPT, un asistente de IA inteligente, amable y conciso. Respondes de forma clara y directa en español."
+            content: systemContent
         };
 
         const allMessages = [systemMessage, ...messages];
