@@ -15,8 +15,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "..", "frontend")));
 app.use(express.static(path.join(process.cwd(), "frontend")));
 
-// Proveedor de IA seleccionado: 'groq' (gratis online), 'ollama' (gratis local en PC) o 'deepseek'
-const provider = (process.env.AI_PROVIDER || "groq").toLowerCase();
+// Proveedor de IA seleccionado: 'openrouter' (gratis online), 'groq', 'ollama' (local) o 'deepseek'
+const provider = (process.env.AI_PROVIDER || "openrouter").toLowerCase();
 
 let clientConfig = {};
 let defaultModel = "";
@@ -33,6 +33,16 @@ if (provider === "ollama") {
         baseURL: "https://api.groq.com/openai/v1"
     };
     defaultModel = process.env.GROQ_MODEL || "groq/compound";
+} else if (provider === "openrouter") {
+    clientConfig = {
+        apiKey: process.env.OPENROUTER_API_KEY || "dummy_key",
+        baseURL: "https://openrouter.ai/api/v1",
+        defaultHeaders: {
+            "HTTP-Referer": "https://mergpt.vercel.app",
+            "X-Title": "MerGPT"
+        }
+    };
+    defaultModel = process.env.OPENROUTER_MODEL || "meta-llama/llama-3.1-8b-instruct:free";
 } else {
     clientConfig = {
         apiKey: process.env.DEEPSEEK_API_KEY || "dummy_key",
@@ -51,6 +61,13 @@ async function handleChat(req, res) {
             return res.status(400).json({
                 error: "Falta configurar la variable GROQ_API_KEY en Vercel (Environment Variables).",
                 reply: "Falta configurar la variable GROQ_API_KEY en Vercel."
+            });
+        }
+
+        if (provider === "openrouter" && (!process.env.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY === "dummy_key")) {
+            return res.status(400).json({
+                error: "Falta configurar la variable OPENROUTER_API_KEY en Vercel (Environment Variables).",
+                reply: "Falta configurar OPENROUTER_API_KEY en Vercel. Obtén tu clave gratuita en openrouter.ai"
             });
         }
 
@@ -82,23 +99,11 @@ async function handleChat(req, res) {
         const allMessages = [systemMessage, ...messages];
         let replyContent = "";
 
-        if (provider === "groq") {
-            const groqClient = new OpenAI({
-                apiKey: groqApiKey,
-                baseURL: "https://api.groq.com/openai/v1"
-            });
-            const respuesta = await groqClient.chat.completions.create({
-                model: defaultModel,
-                messages: allMessages
-            });
-            replyContent = respuesta.choices[0]?.message?.content || "Sin respuesta del modelo.";
-        } else {
-            const respuesta = await client.chat.completions.create({
-                model: defaultModel,
-                messages: allMessages
-            });
-            replyContent = respuesta.choices[0]?.message?.content || "Sin respuesta del modelo.";
-        }
+        const respuesta = await client.chat.completions.create({
+            model: defaultModel,
+            messages: allMessages
+        });
+        replyContent = respuesta.choices[0]?.message?.content || "Sin respuesta del modelo.";
 
         res.json({
             reply: replyContent
