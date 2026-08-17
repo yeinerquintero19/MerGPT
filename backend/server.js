@@ -128,6 +128,10 @@ async function handleChat(req, res) {
     }
 }
 
+app.get("/googled99009649db5e77a.html", (req, res) => {
+    res.send("google-site-verification: googled99009649db5e77a.html");
+});
+
 app.all("/api/chat", handleChat);
 app.all("/chat", handleChat);
 
