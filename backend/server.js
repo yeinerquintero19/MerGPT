@@ -42,7 +42,7 @@ if (provider === "ollama") {
             "X-Title": "MerGPT"
         }
     };
-    defaultModel = process.env.OPENROUTER_MODEL || "deepseek/deepseek-r1:free";
+    defaultModel = process.env.OPENROUTER_MODEL || "google/gemma-4-31b-it:free";
 } else {
     clientConfig = {
         apiKey: process.env.DEEPSEEK_API_KEY || "dummy_key",
